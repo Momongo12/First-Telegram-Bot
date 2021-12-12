@@ -8,4 +8,4 @@ geojson==2.5.0
 lxml==4.6.3
 pycparser==2.20
 requests==2.26.0
-ssl==1.16
+ssl==1.15
