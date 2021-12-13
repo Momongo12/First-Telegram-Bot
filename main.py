@@ -1,6 +1,7 @@
 import json
 import os
 import shutil
+from pathlib import Path
 from aiogram import Bot, Dispatcher, executor
 from aiogram.types import Message
 from aiogram.types.message import ContentType
@@ -18,7 +19,8 @@ time = time.localtime(time.time())
 
 @dp.message_handler(commands=['start'])
 async def callback_start(message: Message):
-    with open("data/HiSticker.tgs", 'rb') as sticker:
+    path = Path("data", "HiSticker.tgs")
+    with open(path, 'rb') as sticker:
         await bot.send_sticker(message.chat.id, sticker)
         await bot.send_message(chat_id=message.chat.id, text="Привет\U0001F600\nМеня зовут Лупа\nЯ твой бот помощник\U0001F916\nФункции которые я могу выполнять ты можешь увидеть ниже\U0001F447", reply_markup=kb_markup)
 
@@ -69,9 +71,10 @@ async def send_weather(message: Message):
 async def delete_folders():
     """Deleting folders with pictures for previous days month"""
     for day in range(1, time.tm_mday):
-        if os.path.exists(f"E:/My_First_tgBot/data/date_img_from_{time.tm_mon}_{day}"):
+        path = Path("data", f'date_img_from_{time.tm_mday}_{day}')
+        if os.path.exists(path):
             try:
-                shutil.rmtree(f"E:/My_First_tgBot/data/date_img_from_{time.tm_mon}_{day}")
+                shutil.rmtree(path)
             except Exception as ex:
                 print(f"Error remove folder - {ex}")
 
@@ -81,10 +84,11 @@ async def callback_message(message: Message):
     if res is None:
         await bot.send_message(message.from_user.id, f"Видимо новостей за сегодня еще нет\U0001F610\nЗайдите попозже:)")
     else:
-        with open("E:/My_First_tgBot/data/data_news.json", encoding="utf-8") as file:
+        with open(Path('data','data_news.json'), encoding="utf-8") as file:
             card_news = json.load(file)
             for i in card_news:
-                with open(f"E:/My_First_tgBot/data/date_img_from_{time.tm_mon}_{time.tm_mday}/{i['code_img']}", "rb") as photo:
+                path = Path('data', f'date_img_from_{time.tm_mon}_{time.tm_mday}',f"{i['code_img']}" )
+                with open(path, "rb") as photo:
                     await bot.send_photo(
                         message.from_user.id,
                         photo,
@@ -100,7 +104,8 @@ async def callback_message(message: Message):
         await bot.send_message(message.from_user.id, f"Видимо новостей за сегодня еще нет\U0001F610\nЗайдите попозже:)")
     else:
         for i in res:
-            with open(f"E:/My_First_tgBot/data/date_img_from_{time.tm_mon}_{time.tm_mday}/{i['code_img']}", "rb") as photo:
+            path = Path('data', f'date_img_from_{time.tm_mon}_{time.tm_mday}', f"{i['code_img']}")
+            with open(path, "rb") as photo:
                 await bot.send_photo(
                     message.from_user.id,
                     photo,

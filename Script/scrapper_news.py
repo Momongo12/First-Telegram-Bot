@@ -6,6 +6,7 @@ import ssl
 import certifi
 from bs4 import BeautifulSoup
 import time
+from pathlib import Path
 
 
 
@@ -31,9 +32,11 @@ async def download_image(url):
         async with session.get(url, headers=headers, ssl=sslcontext) as resp:
             response = await resp.read()
     day = (time.tm_mon, time.tm_mday)  # (month, day)
-    if not (os.path.exists(f"E:/My_First_tgBot/data/date_img_from_{day[0]}_{day[1]}")):
-        os.mkdir(f'E:/My_First_tgBot/data/date_img_from_{day[0]}_{day[1]}')
-    with open(f"E:/My_First_tgBot/data/date_img_from_{day[0]}_{day[1]}/{url[48:]}", 'wb') as img:
+    path = Path("data", f'date_img_from_{day[0]}_{day[1]}')
+    if not (os.path.exists(path)):
+        os.mkdir(path)
+    pathimg = Path("data", f'date_img_from_{day[0]}_{day[1]}', f"{url[48:]}")
+    with open(pathimg, 'wb') as img:
         img.write(response)
         print("Изображение загружено")
 
@@ -72,7 +75,8 @@ async def get_data(cards):
                 'views': int(''.join(views))
             }
         )
-        with open('E:/My_First_tgBot/data/data_news.json', 'w', encoding='utf-8') as file:
+        path = Path('data','data_news.json')
+        with open(path, 'w', encoding='utf-8') as file:
             json.dump(card_infos, file, indent=4, ensure_ascii=False)
 
 async def all_news():
@@ -94,7 +98,8 @@ async def top_five_news():
     else:
         await get_data(cards)
         arr = []
-        with open("E:/My_First_tgBot/data/data_news.json", encoding='utf-8') as file:
+        path = Path('data', 'data_news.json')
+        with open(path, encoding='utf-8') as file:
             li = json.load(file)
             li.sort(key=lambda x: x['views'], reverse=True)
             count = 0
