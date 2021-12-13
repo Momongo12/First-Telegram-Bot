@@ -1,2 +1,2 @@
-TOKEN = '2013840615:AAGxqmnm1DgeEd9P4jsvc659dVuRS06KkYA'
-TOKEN_WEATHER = 'f793837df954d9d8bb3f136624367dde'
+TOKEN = 'Your token telegram bot'
+TOKEN_WEATHER = 'you token open weather'
