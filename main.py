@@ -71,7 +71,7 @@ async def send_weather(message: Message):
 async def delete_folders():
     """Deleting folders with pictures for previous days month"""
     for day in range(1, time.tm_mday):
-        path = Path("data", f'date_img_from_{time.tm_mday}_{day}')
+        path = Path("data", f'date_img_from_{time.tm_mon}_{day}')
         if os.path.exists(path):
             try:
                 shutil.rmtree(path)

@@ -1,4 +1,3 @@
-import asyncio
 import aiohttp
 import certifi
 import ssl
@@ -29,4 +28,3 @@ async def get_data_corona():
     total_in_region['died_today'] = br_today_in_region[1].text
     total_in_region["cured_today"] = br_today_in_region[2].text
     return total_in_region
-

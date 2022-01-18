@@ -1,7 +1,6 @@
 import os
 import json
 import aiohttp
-import asyncio
 import ssl
 import certifi
 from bs4 import BeautifulSoup
@@ -38,7 +37,6 @@ async def download_image(url):
     pathimg = Path("data", f'date_img_from_{day[0]}_{day[1]}', f"{url[48:]}")
     with open(pathimg, 'wb') as img:
         img.write(response)
-        print("Изображение загружено")
 
 async def get_page_news(resp):
     """we get today's news from the page"""
@@ -46,9 +44,11 @@ async def get_page_news(resp):
     card_news = soup.find_all('article', attrs={"data-test": "archive-record-item"})
     for i in range(0, len(card_news)):
         day = time.tm_mday
+        mon = time.tm_mon
         day = '0' + str(day) if day < 10 else day
+        mon = '0' + str(mon) if mon < 10 else mon
         date_time = card_news[i].find('time').attrs['datetime'][:-9] #year-mon-day
-        if date_time == f"{time.tm_year}-{time.tm_mon}-{day}":# compare the date of the card with today's date
+        if date_time == f"{time.tm_year}-{mon}-{day}":# compare the date of the card with today's date
             continue
         else:
             return card_news[:i]
@@ -113,9 +113,7 @@ async def top_five_news():
         return arr
 
 
-# For test script
-""" 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(top_five_news())
-"""
+#loop = asyncio.get_event_loop()
+#loop.run_until_complete(all_news())
+
 
